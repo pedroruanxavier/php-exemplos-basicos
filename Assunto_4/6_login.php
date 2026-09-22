@@ -29,34 +29,34 @@
         $senha = $_POST['senha'];
 
         // Abre o arquivo de usuário.txt para leitura "read - r"
-        $arquivo = fopen('../Assunto_3/usuários.txt', 'r');
+        $arquivo = fopen('../Assunto_3/usuarios.txt', 'r');
         $login_sucesso = false;
 
         // Lê cada linha do arquivo
         while (($linha = fgets($arquivo)) !== false) {
-            // Divide a linha em nome e senha (assumindo que estejam separados por um caractere como ':')
-            $dados = explode(':', trim($linha));
-            if (isset($dados[0]) && isset($dados[1])) {
-                $nome_arquivo = $dados[0];
-                $senha_arquivo = $dados[1];
 
-                // Verifica se os dados correspondem ao login
-                if ($nome === $nome_arquivo && $senha === $senha_arquivo) {
-                    $login_sucesso = true;
-                    break;
-                }
+            // Divide a linha em nome e senha (assumindo que estejam separados por um caractere como ':')
+            list($usuario_arquivo, $senha_arquivo) = explode(';', trim($linha));
+            
+            // Verifica se o nome e a senha correspondem
+            if ($nome == $usuario_arquivo && $senha == $senha_arquivo) {
+                $login_sucesso = true;
+                break;
             }
         }
 
-        // Fecha o arquivo
+        // Fecha o arquivo]
         fclose($arquivo);
 
-        // Exibe mensagem de acordo com o resultado do login
+        // Exibe mensagem de sucesso ou erro
         if ($login_sucesso) {
-            echo "<p>Login bem-sucedido! Bem-vindo, $nome.</p>";
+            echo "<p style=\"color: darkgreen;\">Login bem-sucedido! Bem-vindo, $nome.</p>";
         } else {
-            echo "<p>Nome ou senha incorretos. Tente novamente.</p>";
+            echo "<p style=\"color: red;\">Nome ou senha incorretos. Tente novamente.</p>";
         }
+            
+         // Comunica para o front-end e atualiza após 3segundos
+        header('Refresh: 3; url=' . $_SERVER['PHP_SELF']);
     }
 
     ?>
